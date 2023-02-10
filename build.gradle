@@ -5,6 +5,8 @@ buildscript {
         okhttp_version = '4.10.0'
         timber_version = '5.0.1'
         dagger_hilt_version = '2.44'
+        paging_version = '3.1.1'
+
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
