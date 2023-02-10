@@ -6,14 +6,14 @@ import com.della.hassintmdbtask.domain.PopularMovieRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ViewModelComponent::class)
 class RepositoryModule {
 
-    @Singleton
     @Provides
     fun providePopularMovieRepository(apiService: ApiService):PopularMovieRepository = PopularMovieRepositoryImpl(apiService)
 }
