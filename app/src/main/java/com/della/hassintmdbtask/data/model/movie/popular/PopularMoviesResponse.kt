@@ -1,4 +1,4 @@
-package com.della.hassintmdbtask.data.model
+package com.della.hassintmdbtask.data.model.movie.popular
 
 
 import com.google.gson.annotations.SerializedName
