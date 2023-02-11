@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Hassin Tmdb Task</string>
+    <string name="poster_content_description">Poster Image of %1$s</string>
+    <string name="backdrop_content_description">Movie backdropPath</string>
 </resources>
