@@ -31,7 +31,8 @@ private val span: (LazyGridItemSpanScope) -> GridItemSpan = { GridItemSpan(GRID_
 fun LazyGridMovie(
     state: LazyGridState,
     movies: LazyPagingItems<Movie>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigationToMovieDetail : (Int)-> Unit = {}
 ) {
     LazyVerticalGrid(
         modifier = modifier.background(Color.DarkGray),
@@ -62,8 +63,8 @@ fun LazyGridMovie(
                 MovieItem(movie = movie,
                     modifier = Modifier
                     .height(280.dp)
-                    .padding(vertical = GRID_SPACE),){
-                    Timber.d("Id of selected movie is $it")
+                    .padding(vertical = GRID_SPACE),){ movieId->
+                    onNavigationToMovieDetail(movieId)
                 }
             }
 
