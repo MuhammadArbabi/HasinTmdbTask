@@ -11,6 +11,6 @@ interface ApiService {
     @GET("movie/popular")
     suspend fun getPopularMovies(@Query(value = "page") page: Int): PopularMoviesResponse
 
-    @GET("/movie/{movie_id}")
+    @GET("movie/{movie_id}")
     suspend fun getMovieDetails(@Path(value = "movie_id") movieId: Int) : MovieDetailResponse
 }
