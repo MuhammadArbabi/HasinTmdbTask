@@ -1,4 +1,4 @@
-package com.della.hassintmdbtask.data.model.movie
+package com.della.hassintmdbtask.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

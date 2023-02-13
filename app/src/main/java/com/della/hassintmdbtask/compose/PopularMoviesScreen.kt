@@ -9,8 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Filter
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,10 +27,13 @@ fun PopularMoviesScreen(
     onNavigationToMovieDetail: (Int) -> Unit
 ) {
 
-    val moviesFlow = remember { popularMovieViewModel.getPopularMovies() }
-    val movies = moviesFlow.collectAsLazyPagingItems()
-
+    val moviesFlow = remember{ popularMovieViewModel.popularMovies }
+    val movies = moviesFlow.value.collectAsLazyPagingItems()
     val state = rememberLazyGridState()
+
+
+
+
     Column {
 
 
@@ -56,16 +59,18 @@ fun PopularMoviesScreen(
                 titleContentColor = MaterialTheme.colorScheme.onSurface
             ), title = {
 
-                    Text(
-                        text = "Popular",
-                        color = Color.White
-                    )
+                Text(
+                    text = "Popular",
+                    color = Color.White
+                )
 
             }
         )
         when (movies.loadState.refresh) { //FIRST LOAD
             is LoadState.Error -> {
-               ErrorLoading()
+                ErrorLoading("Movie list load problem!") {
+                    popularMovieViewModel.getPopularMovies()
+                }
             }
             is LoadState.Loading -> { // Loading UI
                 LoadingIndicator()
