@@ -31,7 +31,7 @@ fun PopularMoviesScreen(
     val movies = moviesFlow.collectAsLazyPagingItems()
 
     val state = rememberLazyGridState()
-    Column() {
+    Column {
 
 
         TopAppBar(
@@ -65,11 +65,10 @@ fun PopularMoviesScreen(
         )
         when (movies.loadState.refresh) { //FIRST LOAD
             is LoadState.Error -> {
-                //TODO Error Item
-                //state.error to get error message
+               ErrorLoading()
             }
             is LoadState.Loading -> { // Loading UI
-                //TODO show Loading
+                LoadingIndicator()
             }
             else -> {
                 LazyGridMovie(state = state, movies = movies, modifier) { movieId ->
