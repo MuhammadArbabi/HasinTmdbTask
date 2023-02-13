@@ -7,5 +7,5 @@ import com.della.hassintmdbtask.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface MovieDetailRepository {
-    suspend fun getMovieDetails(movieId: Int): Resource<MovieDetailResponse>
+    suspend fun getMovieDetails(movieId: Int): Resource<MovieDetailResponse?>
 }

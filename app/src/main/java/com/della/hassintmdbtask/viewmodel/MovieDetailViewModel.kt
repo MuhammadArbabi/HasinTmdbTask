@@ -16,23 +16,12 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(private val movieDetailRepository: MovieDetailRepository) : ViewModel() {
-    private var _movieDetail = mutableStateOf<MovieDetailResponse?>(null)
-    val movieDetail : MutableState<MovieDetailResponse?> = _movieDetail
+    private var _movieDetail = mutableStateOf<Resource<MovieDetailResponse?>>(Resource.Loading())
+    val movieDetail : MutableState<Resource<MovieDetailResponse?>> = _movieDetail
 
     suspend fun getDetailOfMovie(movieId:Int) = viewModelScope.launch {
-        movieDetailRepository.getMovieDetails(movieId).also { result->
-           when(result){
-               is Resource.Success ->{
-                   _movieDetail.value = result.data
-               }
-               is Resource.Error ->{
-                   Timber.d(result.statusMessage)
-               }
-               else -> {
-                   // is Loading
-               }
-           }
-        }
+        _movieDetail.value = Resource.Loading()
+        _movieDetail.value = movieDetailRepository.getMovieDetails(movieId)
     }
 
 }
