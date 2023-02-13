@@ -3,8 +3,6 @@ package com.della.hassintmdbtask.compose
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +19,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.della.hassintmdbtask.data.model.movie.popular.Movie
 import com.della.hassintmdbtask.util.toDp
-import timber.log.Timber
 
 private const val GRID_ROW_ITEMS = 3
 private val GRID_SPACE = 4.dp
@@ -36,7 +33,7 @@ fun LazyGridMovie(
 ) {
     LazyVerticalGrid(
         modifier = modifier.background(Color.DarkGray),
-        columns = GridCells.Fixed(count = GRID_ROW_ITEMS),
+        columns = GridCells.Fixed(GRID_ROW_ITEMS),
         contentPadding = PaddingValues(
             start = GRID_SPACE,
             end = GRID_SPACE,
@@ -45,6 +42,7 @@ fun LazyGridMovie(
         horizontalArrangement = Arrangement.spacedBy(GRID_SPACE, Alignment.CenterHorizontally),
         state = state,
         content = {
+
             if (movies.itemCount==0 && movies.loadState.refresh !is LoadState.Loading){
                 item(span = span) {Text(
                     text = "No Movie...",
@@ -58,7 +56,9 @@ fun LazyGridMovie(
                     overflow = TextOverflow.Ellipsis)
                 }
             }
-            items(movies.itemCount) { index ->
+            items(movies.itemCount,
+            key= { index -> movies[index]!!.id  } ) { index ->
+
                 val movie = movies.peek(index)?: return@items
                 MovieItem(movie = movie,
                     modifier = Modifier
