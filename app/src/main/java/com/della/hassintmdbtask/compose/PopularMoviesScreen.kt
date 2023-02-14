@@ -16,7 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.della.hassintmdbtask.data.model.movie.popular.Movie
 import com.della.hassintmdbtask.viewmodel.PopularMovieViewModel
+import com.della.hassintmdbtask.viewmodel.SharedViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,7 +26,7 @@ import com.della.hassintmdbtask.viewmodel.PopularMovieViewModel
 fun PopularMoviesScreen(
     modifier: Modifier = Modifier,
     popularMovieViewModel: PopularMovieViewModel = hiltViewModel(),
-    onNavigationToMovieDetail: (Int) -> Unit
+    onNavigationToMovieDetail: (Movie) -> Unit
 ) {
 
     val moviesFlow = remember{ popularMovieViewModel.popularMovies }
@@ -76,8 +78,8 @@ fun PopularMoviesScreen(
                 LoadingIndicator()
             }
             else -> {
-                LazyGridMovie(state = state, movies = movies, modifier) { movieId ->
-                    onNavigationToMovieDetail(movieId)
+                LazyGridMovie(state = state, movies = movies, modifier) { movie ->
+                    onNavigationToMovieDetail(movie)
                 }
             }
         }

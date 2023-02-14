@@ -29,6 +29,8 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.della.hassintmdbtask.R
 import com.della.hassintmdbtask.data.model.movie.detail.MovieDetailResponse
+import com.della.hassintmdbtask.data.model.movie.popular.Movie
+import com.della.hassintmdbtask.util.Resource
 import com.della.hassintmdbtask.util.toBackdropUrl
 import com.della.hassintmdbtask.util.toPosterUrl
 import com.google.accompanist.flowlayout.FlowRow
@@ -38,7 +40,11 @@ private val headerHeight = 250.dp
 private val toolbarHeight = 56.dp
 
 @Composable
-fun MovieInfoScreen(movie: MovieDetailResponse, onBackClick: () -> Unit) {
+fun MovieInfoScreen(
+    movie: Movie,
+    movieDetailResource: Resource<MovieDetailResponse?>,
+    onBackClick: () -> Unit
+) {
     val scroll: ScrollState = rememberScrollState(0)
     val headerHeightPx = with(LocalDensity.current) { headerHeight.toPx() }
     val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.toPx() }
@@ -56,7 +62,7 @@ fun MovieInfoScreen(movie: MovieDetailResponse, onBackClick: () -> Unit) {
             headerHeightPx = headerHeightPx
         )
 
-        Body(movie, scroll)
+        Body(movie, movieDetailResource, scroll)
 
         Toolbar(
             movie.title,
@@ -177,8 +183,10 @@ private fun Toolbar(
                 enter = fadeIn(animationSpec = tween(300)),
                 exit = fadeOut(animationSpec = tween(300))
             ) {
-                Text(text = movieTitle,
-                color = Color.White)
+                Text(
+                    text = movieTitle,
+                    color = Color.White
+                )
             }
         }
     )
@@ -186,14 +194,18 @@ private fun Toolbar(
 }
 
 @Composable
-private fun Body(movie: MovieDetailResponse, scroll: ScrollState) {
+private fun Body(
+    movie: Movie,
+    movieDetailResource: Resource<MovieDetailResponse?>,
+    scroll: ScrollState
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.verticalScroll(scroll)
     ) {
         Spacer(Modifier.height(headerHeight - toolbarHeight))
 
-        BriefInfo(movie = movie)
+        BriefInfo(movie = movie, movieDetailResource = movieDetailResource)
         RateRow(movie)
         Overview(movie)
 
@@ -201,7 +213,10 @@ private fun Body(movie: MovieDetailResponse, scroll: ScrollState) {
 }
 
 @Composable
-private fun BriefInfo(movie: MovieDetailResponse) {
+private fun BriefInfo(
+    movie: Movie,
+    movieDetailResource: Resource<MovieDetailResponse?>,
+) {
     Row() {
         ElevatedCard(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
@@ -220,17 +235,20 @@ private fun BriefInfo(movie: MovieDetailResponse) {
                 modifier = Modifier.padding(8.dp)
             )
 
+
             FlowRow(
                 mainAxisSpacing = 4.dp,
-                crossAxisSpacing = 4.dp,
+                crossAxisSpacing = 2.dp,
                 mainAxisAlignment = MainAxisAlignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(4.dp)
 
             ) {
-                movie.genres.forEach {
-                    ChipsItem(name = it.name)
+                if (movieDetailResource is Resource.Success) {
+                    movieDetailResource.data!!.genres.forEach {
+                        ChipsItem(name = it.name)
+                    }
                 }
             }
         }
@@ -239,7 +257,7 @@ private fun BriefInfo(movie: MovieDetailResponse) {
 
 
 @Composable
-fun RateRow(movie: MovieDetailResponse) {
+fun RateRow(movie: Movie) {
     Column() {
         Divider(color = Color.Gray, thickness = 1.dp)
 
@@ -309,7 +327,7 @@ fun RateRow(movie: MovieDetailResponse) {
 }
 
 @Composable
-fun Overview(movie: MovieDetailResponse) {
+fun Overview(movie: Movie) {
     Column(modifier = Modifier.padding(8.dp)) {
         Text(text = stringResource(R.string.overview))
         Spacer(modifier = Modifier.height(12.dp))

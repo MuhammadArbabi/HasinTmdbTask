@@ -29,7 +29,7 @@ fun LazyGridMovie(
     state: LazyGridState,
     movies: LazyPagingItems<Movie>,
     modifier: Modifier = Modifier,
-    onNavigationToMovieDetail : (Int)-> Unit = {}
+    onNavigationToMovieDetail : (Movie)-> Unit = {}
 ) {
     LazyVerticalGrid(
         modifier = modifier.background(Color.DarkGray),
@@ -63,8 +63,8 @@ fun LazyGridMovie(
                 MovieItem(movie = movie,
                     modifier = Modifier
                     .height(280.dp)
-                    .padding(vertical = GRID_SPACE),){ movieId->
-                    onNavigationToMovieDetail(movieId)
+                    .padding(vertical = GRID_SPACE),){ movie->
+                    onNavigationToMovieDetail(movie)
                 }
             }
 

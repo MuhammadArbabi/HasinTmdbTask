@@ -8,15 +8,18 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.della.hassintmdbtask.util.Resource
 import com.della.hassintmdbtask.viewmodel.MovieDetailViewModel
+import com.della.hassintmdbtask.viewmodel.SharedViewModel
 
 
 @Composable
 fun MovieDetail(
-    onBackClick: ()->Unit,
+    onBackClick: () -> Unit,
     movieId: Int,
+    sharedViewModel: SharedViewModel,
     modifier: Modifier = Modifier,
-    movieDetailViewModel: MovieDetailViewModel = hiltViewModel()
+    movieDetailViewModel: MovieDetailViewModel = hiltViewModel(),
 ) {
+    val movie = sharedViewModel.selectedMovie.value
     val rememberedMovieId by remember {
         mutableStateOf(movieId)
     }
@@ -27,27 +30,30 @@ fun MovieDetail(
 
 
     LaunchedEffect(key1 = rememberedLoadDetail) {
-       if(movieDetail !is Resource.Success)
-        movieDetailViewModel.getDetailOfMovie(rememberedMovieId)
+        if (movieDetail !is Resource.Success)
+            movieDetailViewModel.getDetailOfMovie(rememberedMovieId)
     }
 
-    when(movieDetail){
-        is Resource.Success ->{
-            MovieInfoScreen(movie = movieDetail.data!!){
-                onBackClick()
-            }
-        }
-        is Resource.Error ->{
-            ErrorLoading(message = "Error on loading Detail of movie ...") {
-                rememberedLoadDetail++
-            }
-        }
-        else -> {
-            LoadingIndicator()
-        }
+    MovieInfoScreen(movie = movie, movieDetailResource = movieDetail) {
+        onBackClick()
     }
-    movieDetail?.let { movie ->
+    /*  when(movieDetail){
+          is Resource.Success ->{
+              MovieInfoScreen(movie = movieDetail.data!!){
+                  onBackClick()
+              }
+          }
+          is Resource.Error ->{
+              ErrorLoading(message = "Error on loading Detail of movie ...") {
+                  rememberedLoadDetail++
+              }
+          }
+          else -> {
+              LoadingIndicator()
+          }
+      }
+      movieDetail?.let { movie ->
 
 
-    }
+      }*/
 }

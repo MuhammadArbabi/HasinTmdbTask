@@ -37,14 +37,14 @@ import com.della.hassintmdbtask.util.toPosterUrl
 fun MovieItem(
     movie: Movie,
     modifier: Modifier = Modifier,
-    onNavigationToMovieDetail : (Int)-> Unit = {}
+    onNavigationToMovieDetail : (Movie)-> Unit = {}
 ) {
     Box(modifier = modifier) {
         Card(modifier = Modifier
             .fillMaxSize(),
             shape = RoundedCornerShape(size = 4.dp),
             backgroundColor = Color.Gray,
-            onClick = { onNavigationToMovieDetail(movie.id) }
+            onClick = { onNavigationToMovieDetail(movie) }
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
